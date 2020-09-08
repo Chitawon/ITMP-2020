@@ -12,7 +12,7 @@
 	<div id="canvas">
 		<section id="canvas_header">
 			<div>
-				-- แสดงคะแนน
+				{{score}} คะแนน
 			</div>
 		</section>
 		<section id="canvas_main" :data-play="play">
@@ -29,7 +29,7 @@
 			</main>
 		</section>
 		<section id="canvas_footer">
-			<div v-if="play" class="btn" id="toggle" @click="change()">
+			<div v-if="play" class="btn" id="toggle" @click="toggle()">
 				Toggle
 			</div>
 			<div v-if="!play" class="btn" id="endgame">
@@ -57,11 +57,11 @@
 				score: 0,
 				fruits: [
 					{ id: 1, type: 13, pst: 6, run: true, step: 1 },
-					{ id: 2, type: 11, pst: 3, run: true, step: 1 }
+					{ id: 2, type: 11, pst: 3, run: true, step: 1 },
 				]
 			},
 			methods: {
-				change: function () {
+				toggle: function () {
 					if (this.isRightArrow == 1) {
 						this.isRightArrow = 0
 					} else {
@@ -75,12 +75,30 @@
 				turn: function (x) {
 					let count = this.fruits.length;
 					for (let f in this.fruits) {
+						
 						let run = this.fruits[f].run;
 						if (run) {
-							this.fruits[f].pst = this.fruits[f].pst + 1;
+							this.fruits[f].pst = this.fruits[f].pst + this.fruits[f].step;
 						}
 
+						if (this.fruits[f].pst == 10) {
+							if (this.isRightArrow == 1) {
+								this.fruits[f].step = 3
+							} else {
+								this.fruits[f].step = 1
+							}
+						}
 
+						if (this.fruits[f].pst == 11 || this.fruits[f].pst == 13) {
+
+							if (this.fruits[f].pst == this.fruits[f].type && this.fruits[f].run) {
+								this.score ++
+							}
+							
+							else if (this.fruits[f].pst != this.fruits[f].type && this.fruits[f].run) {
+								this.play = false 
+							}
+						}
 
 
 						let spawn = rand(0, 1)
@@ -98,9 +116,12 @@
 			}
 		});
 
-		let playing = setInterval(() => {
-			app.turn++;
-		}, speed);
+		setTimeout(function timespeed(){
+			if (app.play) {
+				app.turn++
+				setTimeout(timespeed, app.speed)
+			}
+		},app.speed)
 	</script>
 </body>
 
