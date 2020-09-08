@@ -29,7 +29,7 @@
 			</main>
 		</section>
 		<section id="canvas_footer">
-			<div v-if="play" class="btn" id="toggle">
+			<div v-if="play" class="btn" id="toggle" @click="change()">
 				Toggle
 			</div>
 			<div v-if="!play" class="btn" id="endgame">
@@ -44,7 +44,7 @@
 			return Math.floor(Math.random() * 100 % shift) + start
 		}
 
-		let fruitCount = 5
+		let fruitId = 3
 		let isRightArrow = 1
 		let speed = 1000
 		let app = new Vue({
@@ -68,7 +68,7 @@
 						this.isRightArrow = 1
 					}
 					console.log(this.isRightArrow)
-				}
+				},
 			},
 			computed: {},
 			watch: {
@@ -78,6 +78,20 @@
 						let run = this.fruits[f].run;
 						if (run) {
 							this.fruits[f].pst = this.fruits[f].pst + 1;
+						}
+
+
+
+
+						let spawn = rand(0, 1)
+						if (spawn == 1) {
+							newfruit = rand(0, 1)
+							if (newfruit == 1) {
+								this.fruits.push({ id: fruitId, type: 11, pst: 1, run: true, step: 1 })
+							} else {
+								this.fruits.push({ id: fruitId, type: 13, pst: 1, run: true, step: 1 })
+							}
+							fruitId++;
 						}
 					}
 				}
