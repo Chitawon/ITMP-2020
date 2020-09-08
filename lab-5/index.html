@@ -67,19 +67,12 @@
 					} else {
 						this.isRightArrow = 1
 					}
-					console.log(this.isRightArrow)
 				},
 			},
 			computed: {},
 			watch: {
-				turn: function (x) {
-					let count = this.fruits.length;
+				turn: function () {
 					for (let f in this.fruits) {
-						
-						let run = this.fruits[f].run;
-						if (run) {
-							this.fruits[f].pst = this.fruits[f].pst + this.fruits[f].step;
-						}
 
 						if (this.fruits[f].pst == 10) {
 							if (this.isRightArrow == 1) {
@@ -92,36 +85,45 @@
 						if (this.fruits[f].pst == 11 || this.fruits[f].pst == 13) {
 
 							if (this.fruits[f].pst == this.fruits[f].type && this.fruits[f].run) {
-								this.score ++
+								this.score++
 							}
-							
+
 							else if (this.fruits[f].pst != this.fruits[f].type && this.fruits[f].run) {
-								this.play = false 
+								this.play = false
 							}
 						}
 
 
-						let spawn = rand(0, 1)
-						if (spawn == 1) {
-							newfruit = rand(0, 1)
-							if (newfruit == 1) {
-								this.fruits.push({ id: fruitId, type: 11, pst: 1, run: true, step: 1 })
-							} else {
-								this.fruits.push({ id: fruitId, type: 13, pst: 1, run: true, step: 1 })
-							}
-							fruitId++;
+						if (this.fruits[f].pst == 12 || this.fruits[f].pst == 16) {
+							this.fruits[f].run = false;
 						}
+
+						let run = this.fruits[f].run;
+						if (run) {
+							this.fruits[f].pst = this.fruits[f].pst + this.fruits[f].step;
+						}
+
+					}
+					let spawn = rand(0, 1)
+					if (spawn == 1) {
+						newfruit = rand(0, 1)
+						if (newfruit == 1) {
+							this.fruits.push({ id: fruitId, type: 11, pst: 1, run: true, step: 1 })
+						} else {
+							this.fruits.push({ id: fruitId, type: 13, pst: 1, run: true, step: 1 })
+						}
+						fruitId++;
 					}
 				}
 			}
 		});
 
-		setTimeout(function timespeed(){
+		setTimeout(function timespeed() {
 			if (app.play) {
 				app.turn++
 				setTimeout(timespeed, app.speed)
 			}
-		},app.speed)
+		}, app.speed)
 	</script>
 </body>
 
